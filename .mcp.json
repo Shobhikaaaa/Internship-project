@@ -1,0 +1,8 @@
+{
+  "context_servers": [
+    {
+      "id": "hotel",
+      "url": "http://localhost:3333/context/hotel"
+    }
+  ]
+}

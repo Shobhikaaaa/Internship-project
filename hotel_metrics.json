@@ -1,0 +1,74 @@
+import requests
+import json
+import os
+
+def get_hotel_metrics():
+    url = "https://zjmuqawoq5azfcndh7jjlrmroa.appsync-api.ap-south-1.amazonaws.com/graphql"
+
+    headers = {
+        "x-api-key": "da2-hpf5f2lxyjed7gha7rrxhfkguq",
+        "Content-Type": "application/json"
+    }
+
+    query = """
+    query GetHotelMetrics {
+      getHotelMetrics(
+        hotelId: "02497a43-5339-453a-9731-d14431a66070",
+        startDate: "2025-04-28",
+        endDate: "2025-07-02",
+        fetchFromPostgres: true
+      ) {
+        hotelMetric {
+          day
+          formattedDate
+          hotelId
+          hotelName
+          reportDate
+          totalStats {
+            adoptionRate
+            checkIns {
+              success
+              failed
+            }
+            checkOuts {
+              success
+              failed
+            }
+            engagementRate
+          }
+        }
+      }
+    }
+    """
+
+    payload = {
+        "query": query,
+        "variables": {}
+    }
+
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        print("STATUS:", response.status_code)
+
+        response.raise_for_status()  # Raise HTTPError for bad responses
+
+        data = response.json()
+
+        # Optional: Validate structure before saving
+        if "data" in data and "getHotelMetrics" in data["data"]:
+            with open("hotel_metrics.json", "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+            print("✅ Data saved to hotel_metrics.json")
+        else:
+            print("⚠️ Unexpected response format:", data)
+
+        return data
+
+    except requests.exceptions.RequestException as e:
+        print("❌ Request failed:", e)
+    except Exception as ex:
+        print("❌ Unexpected error:", ex)
+
+# Run only when the script is executed directly
+if __name__ == "__main__":
+    get_hotel_metrics()

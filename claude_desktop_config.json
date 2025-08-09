@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "hotel": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\Users\\shobh\\Downloads\\mcp-hotel-demp\\hotel",
+        "run",
+        "hotel.py"
+      ]
+    }
+  }
+}
